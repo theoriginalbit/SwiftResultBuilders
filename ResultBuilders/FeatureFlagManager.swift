@@ -9,4 +9,9 @@ struct FeatureFlagManager {
         // this is just an example, no frills
         true
     }
+
+    func anyEnabled(_ features: Feature...) -> Bool {
+        // this is just an example, no frills
+        true
+    }
 }

@@ -10,6 +10,8 @@
 		2385BD5428AE104700FAE1F4 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2385BD5328AE104700FAE1F4 /* RxSwift */; };
 		2385BD5728AE105600FAE1F4 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 2385BD5628AE105600FAE1F4 /* RxDataSources */; };
 		2385BD5D28AE125400FAE1F4 /* SettingsSection+Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2385BD5C28AE125400FAE1F4 /* SettingsSection+Builder.swift */; };
+		2385BD6028AE1C0900FAE1F4 /* SettingsSectionItemBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2385BD5E28AE1C0900FAE1F4 /* SettingsSectionItemBuilder.swift */; };
+		2385BD6128AE1C0900FAE1F4 /* SettingsSectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2385BD5F28AE1C0900FAE1F4 /* SettingsSectionBuilder.swift */; };
 		9684B793282BE5D80090FB7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9684B792282BE5D80090FB7F /* AppDelegate.swift */; };
 		9684B795282BE5D80090FB7F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9684B794282BE5D80090FB7F /* SceneDelegate.swift */; };
 		9684B797282BE5D80090FB7F /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9684B796282BE5D80090FB7F /* SettingsViewController.swift */; };
@@ -30,6 +32,8 @@
 
 /* Begin PBXFileReference section */
 		2385BD5C28AE125400FAE1F4 /* SettingsSection+Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsSection+Builder.swift"; sourceTree = "<group>"; };
+		2385BD5E28AE1C0900FAE1F4 /* SettingsSectionItemBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsSectionItemBuilder.swift; sourceTree = "<group>"; };
+		2385BD5F28AE1C0900FAE1F4 /* SettingsSectionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsSectionBuilder.swift; sourceTree = "<group>"; };
 		9684B78F282BE5D80090FB7F /* ResultBuilders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResultBuilders.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9684B792282BE5D80090FB7F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9684B794282BE5D80090FB7F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -108,6 +112,8 @@
 				9684B7D7282BFE0F0090FB7F /* Copy.swift */,
 				9684B7CE282BF8950090FB7F /* FeatureFlagManager.swift */,
 				9684B7C8282BEE720090FB7F /* ReusableView.swift */,
+				2385BD5F28AE1C0900FAE1F4 /* SettingsSectionBuilder.swift */,
+				2385BD5E28AE1C0900FAE1F4 /* SettingsSectionItemBuilder.swift */,
 				9684B7DD282C92280090FB7F /* String+Extended.swift */,
 				9684B7DB282C90DF0090FB7F /* UserService.swift */,
 			);
@@ -226,8 +232,10 @@
 				9684B7D3282BFB0E0090FB7F /* SettingsSectionHeaderView.swift in Sources */,
 				9684B7DA282C90AC0090FB7F /* User.swift in Sources */,
 				9684B7C7282BED780090FB7F /* SettingsTableViewCell.swift in Sources */,
+				2385BD6128AE1C0900FAE1F4 /* SettingsSectionBuilder.swift in Sources */,
 				9684B7DE282C92280090FB7F /* String+Extended.swift in Sources */,
 				9684B795282BE5D80090FB7F /* SceneDelegate.swift in Sources */,
+				2385BD6028AE1C0900FAE1F4 /* SettingsSectionItemBuilder.swift in Sources */,
 				9684B7D1282BF8A70090FB7F /* SettingsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
