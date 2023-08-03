@@ -1,94 +1,74 @@
-import RxDataSources
-import RxSwift
+//
+//  SettingsViewController.swift
+//  ResultBuilders
+//
+//  Created by Joshua Asbury on 27/5/2023.
+//
+
+import Combine
 import UIKit
 
-class SettingsViewController: UIViewController {
-    private var tableViewDataSource: RxTableViewSectionedReloadDataSource<SettingsSection>?
-    private let disposeBag = DisposeBag()
+final class SettingsViewController: UIViewController, UITableViewDelegate {
+    final class DataSource: UITableViewDiffableDataSource<SettingsSection, SettingsSectionItem> {
+        typealias Snapshot = NSDiffableDataSourceSnapshot<SettingsSection, SettingsSectionItem>
 
-    private var tableView: UITableView {
-        view as! UITableView
+        override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+            sectionIdentifier(for: section)?.header
+        }
+
+        override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+            sectionIdentifier(for: section)?.footer
+        }
     }
 
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
-    }
+    private var dataSource: DataSource!
+    private let viewModel = SettingsViewModel()
+    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
+    private var cancellable: [AnyCancellable] = []
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    override init(nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        navigationItem.title = "Settings"
+        navigationItem.title = Copy.Settings.title
+        tabBarItem = UITabBarItem(title: navigationItem.title, image: UIImage(systemName: "gearshape.2"), selectedImage: UIImage(systemName: "gearshape.2.fill"))
     }
 
     @available(*, unavailable)
-    required init?(coder _: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     override func loadView() {
-        view = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view = tableView
+        
+        // TODO: Add some custom tableview header which makes use of uistackview builder.
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let viewModel = SettingsViewModel()
-
-        let settingsDataSource = dataSource()
-
-        viewModel.sections
-            .bind(to: tableView.rx.items(dataSource: settingsDataSource))
-            .disposed(by: disposeBag)
-
-        tableView.rx
-            .setDelegate(self)
-            .disposed(by: disposeBag)
+        tableView.delegate = self
         tableView.register(SettingsTableViewCell.self)
-        tableView.register(SettingsSectionHeaderView.self)
 
-        tableViewDataSource = settingsDataSource
-    }
-}
-
-// MARK: - UITableViewDelegate
-
-extension SettingsViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let title = tableViewDataSource?.sectionModels[section].header else {
-            return nil
+        dataSource = DataSource(tableView: tableView) { tableView, indexPath, item in
+            let cell: SettingsTableViewCell = tableView.dequeueReusableCell(for: indexPath)
+            cell.setItem(item)
+            return cell
         }
 
-        let header: SettingsSectionHeaderView = tableView.dequeueReusableHeaderFooterView()
-        header.title.text = title
-        return header
+        viewModel.$sections.sink { [weak dataSource] sections in
+            var snapshot = DataSource.Snapshot()
+            snapshot.appendSections(sections)
+            for section in sections {
+                snapshot.appendItems(section.items, toSection: section)
+            }
+            dataSource?.apply(snapshot, animatingDifferences: true)
+        }.store(in: &cancellable)
     }
 
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let title = tableViewDataSource?.sectionModels[section].footer else {
-            return nil
-        }
-
-        let header: SettingsSectionHeaderView = tableView.dequeueReusableHeaderFooterView()
-        header.title.text = title
-        return header
-    }
+    // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-}
-
-// MARK: - RxDataSource
-
-extension SettingsViewController {
-    func dataSource() -> RxTableViewSectionedReloadDataSource<SettingsSection> {
-        RxTableViewSectionedReloadDataSource<SettingsSection>(configureCell: { dataSource, tableView, indexPath, _ in
-            Self.cell(for: dataSource[indexPath], at: indexPath, on: tableView)
-        })
-    }
-
-    static func cell(for item: SettingsSectionItem, at indexPath: IndexPath, on tableView: UITableView) -> UITableViewCell {
-        let cell: SettingsTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-        cell.setItem(item)
-        return cell
     }
 }

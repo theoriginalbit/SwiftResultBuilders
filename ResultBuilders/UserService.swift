@@ -1,4 +1,9 @@
-import Foundation
+//
+//  UserService.swift
+//  ResultBuilders
+//
+//  Created by Joshua Asbury on 27/5/2023.
+//
 
 struct UserService {
     static var shared = Self()

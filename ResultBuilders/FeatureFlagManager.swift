@@ -1,3 +1,10 @@
+//
+//  FeatureFlagManager.swift
+//  ResultBuilders
+//
+//  Created by Joshua Asbury on 27/5/2023.
+//
+
 struct FeatureFlagManager {
     static var shared = Self()
 
@@ -11,7 +18,6 @@ struct FeatureFlagManager {
     }
 
     func anyEnabled(_ features: Feature...) -> Bool {
-        // this is just an example, no frills
         true
     }
 }

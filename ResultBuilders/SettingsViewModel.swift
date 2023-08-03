@@ -1,10 +1,17 @@
-import RxSwift
+//
+//  SettingsViewModel.swift
+//  ResultBuilders
+//
+//  Created by Joshua Asbury on 27/5/2023.
+//
 
-struct SettingsViewModel {
-    let sections: Observable<[SettingsSection]>
+import Combine
+
+final class SettingsViewModel {
+    @Published private(set) var sections: [SettingsSection]
 
     init() {
         let user = UserService.shared.get()
-        sections = .just(SettingsSection.settingsSections(for: user))
+        sections = SettingsSection.settingsSections(for: user)
     }
 }

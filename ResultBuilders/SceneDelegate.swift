@@ -1,3 +1,10 @@
+//
+//  SceneDelegate.swift
+//  ResultBuilders
+//
+//  Created by Joshua Asbury on 27/5/2023.
+//
+
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -6,10 +13,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: scene)
-        let navController = UINavigationController(rootViewController: SettingsViewController())
-        navController.navigationBar.prefersLargeTitles = true
-        window.rootViewController = navController
+        window.rootViewController = rootViewController()
         self.window = window
         window.makeKeyAndVisible()
+    }
+
+    private func rootViewController() -> UIViewController {
+        return settingsViewController()
+    }
+
+    private func settingsViewController() -> UIViewController {
+        let controller = SettingsViewController()
+        let navController = UINavigationController(rootViewController: controller)
+        navController.navigationBar.prefersLargeTitles = true
+        return navController
     }
 }

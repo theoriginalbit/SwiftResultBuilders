@@ -1,26 +1,14 @@
+//
+//  SettingsSection.swift
+//  ResultBuilders
+//
+//  Created by Joshua Asbury on 27/5/2023.
+//
+
 import Foundation
-import RxDataSources
 
-struct SettingsSection {
-    var header: String?
-    var items: [SettingsSectionItem]
-    var footer: String?
-}
-
-extension SettingsSection {
-    init(header: Copy.Header? = nil, footer: Copy.Footer? = nil, @SettingsSectionItemBuilder items: () -> [SettingsSectionItem]) {
-        self.header = header.map(String.string(for:))
-        self.footer = footer.map(String.string(for:))
-        self.items = items()
-    }
-}
-
-// MARK: - RxDataSources Requirement
-
-extension SettingsSection: SectionModelType {
-    typealias Item = SettingsSectionItem
-
-    init(original: SettingsSection, items: [Item]) {
-        self.init(header: original.header, items: items, footer: original.footer)
-    }
+struct SettingsSection: Hashable {
+    let header: String?
+    let items: [SettingsSectionItem]
+    let footer: String?
 }

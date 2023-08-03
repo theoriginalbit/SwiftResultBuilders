@@ -1,7 +1,14 @@
+//
+//  SettingsTableViewCell.swift
+//  ResultBuilders
+//
+//  Created by Joshua Asbury on 27/5/2023.
+//
+
 import UIKit
 
-class SettingsTableViewCell: UITableViewCell {
-    private let detail: UILabel = {
+final class SettingsTableViewCell: UITableViewCell {
+    private let primaryLabel: UILabel = {
         let label = UILabel()
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -12,9 +19,8 @@ class SettingsTableViewCell: UITableViewCell {
         return label
     }()
 
-    private let value: UILabel = {
+    private let secondaryLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .right
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
@@ -24,8 +30,7 @@ class SettingsTableViewCell: UITableViewCell {
     }()
 
     private lazy var detailStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [detail, value])
-        stackView.axis = .horizontal
+        let stackView = UIStackView(arrangedSubviews: [primaryLabel, secondaryLabel])
         stackView.spacing = 8
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -50,24 +55,11 @@ class SettingsTableViewCell: UITableViewCell {
     }
 
     func setItem(_ item: SettingsSectionItem) {
-        detail.text = item.text
-
-        switch item {
-        case .tutorial:
-            break
-        case .signOut:
-            detail.textColor = .systemRed
-        case let .dateOfBirth(dob):
-            value.text = dob
-        case let .email(email):
-            value.text = email
-        case let .phoneNumber(number):
-            value.text = number
-        case .deleteAccount:
-            selectionStyle = .none
-        default:
-            accessoryType = .disclosureIndicator
-        }
+        primaryLabel.text = item.text
+        primaryLabel.textColor = item.isDestructive ? .systemRed : .label
+        secondaryLabel.text = item.value
+        accessoryType = item.accessoryType
+        accessoryView = item.accessoryView
     }
 
     override func prepareForReuse() {
@@ -76,9 +68,43 @@ class SettingsTableViewCell: UITableViewCell {
         accessoryView = nil
         accessoryType = .none
 
-        detail.text = nil
-        value.text = nil
-        detail.textColor = .secondaryLabel
-        value.textColor = .label
+        primaryLabel.text = nil
+        primaryLabel.textColor = .label
+        secondaryLabel.text = nil
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        configureViewsForCurrentContentSizeCategory()
+    }
+
+    // MARK: - Helpers
+
+    private func configureViewsForCurrentContentSizeCategory() {
+        detailStackView.axis = axisForCurrentContentSizeCategory()
+        primaryLabel.textAlignment = textAlignmentForCurrentContentSizeCategory(isSecondaryLabel: false)
+        secondaryLabel.textAlignment = textAlignmentForCurrentContentSizeCategory(isSecondaryLabel: true)
+    }
+
+    private func axisForCurrentContentSizeCategory() -> NSLayoutConstraint.Axis {
+        // If we checked with `.isAccessibilityCategory` then XXL would still look bad
+        if traitCollection.preferredContentSizeCategory > .extraExtraLarge {
+            return .vertical // Not enough room for the text if we stay horizontal
+        } else {
+            return .horizontal
+        }
+    }
+
+    private func textAlignmentForCurrentContentSizeCategory(isSecondaryLabel: Bool) -> NSTextAlignment {
+        // If we checked with `.isAccessibilityCategory` then XXL would still look bad
+        if traitCollection.preferredContentSizeCategory > .extraExtraLarge {
+            // When the text is huge and the stack axis has changed, the text should always align natural
+            return .natural
+        } else if isSecondaryLabel {
+            return traitCollection.layoutDirection == .rightToLeft ? .left : .right
+        } else {
+            // Primary label is always natural aligned
+            return .natural
+        }
     }
 }
