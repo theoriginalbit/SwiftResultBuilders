@@ -12,3 +12,11 @@ struct SettingsSection: Hashable {
     let items: [SettingsSectionItem]
     let footer: String?
 }
+
+extension SettingsSection {
+    init(header: String? = nil, footer: String? = nil, @SettingsSectionItemBuilder items: () -> [SettingsSectionItem]) {
+        self.header = header
+        self.footer = footer
+        self.items = items()
+    }
+}
